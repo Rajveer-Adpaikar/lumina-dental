@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import HIPAA from './components/HIPAA';
+import NotFound from './components/NotFound';
 
 function HomePage() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/hipaa" element={<HIPAA />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </div>
