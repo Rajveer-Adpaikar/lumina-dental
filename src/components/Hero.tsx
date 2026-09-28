@@ -7,7 +7,7 @@ export default function Hero() {
   const openBooking = useBooking();
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-wine-950 text-white">
+    <section className="relative min-h-screen flex flex-col bg-wine-950 text-white overflow-hidden">
       {/* backdrop image */}
       <div className="absolute inset-0">
         <img
@@ -20,18 +20,17 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-wine-950 via-wine-950/75 to-wine-900/30" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
+      <div className="relative flex-1 flex items-center max-w-7xl mx-auto px-5 sm:px-8 pt-28 sm:pt-32 pb-14 w-full">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-2xl"
+          className="max-w-2xl w-full"
         >
           <p className="font-data text-xs uppercase tracking-[0.3em] text-blush-300 mb-6">
             Est. {CLINIC.established} · {CLINIC.city}
           </p>
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] text-white">
-            Modern Dentistry.
+          <h1 className="font-display text-[2.6rem] leading-[1.02] text-white text-balance sm:text-6xl lg:text-7xl">Modern Dentistry.
             <span className="block text-blush-200 italic">Exceptional Care.</span>
           </h1>
           <p className="mt-6 text-lg text-white/75 max-w-md leading-relaxed">
@@ -61,9 +60,9 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Trust bar — plain white band, no gradient, no blur */}
-      <div className="absolute bottom-0 inset-x-0 bg-white border-t border-wine-100">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      {/* Trust bar — plain white band in flow (never overlaps hero content) */}
+      <div className="relative bg-white border-t border-wine-100">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-4">
           {CLINIC.stats.map((s) => (
             <div key={s.label} className="flex flex-col gap-0.5">
               <span className="font-display text-3xl text-wine-900">{s.value}</span>
