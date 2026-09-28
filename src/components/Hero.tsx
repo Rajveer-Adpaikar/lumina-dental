@@ -61,13 +61,13 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Trust bar — solid wine strip, no transparency/blur so it never shifts color */}
-      <div className="absolute bottom-0 inset-x-0 bg-wine-900 border-t border-white/10">
+      {/* Trust bar — plain white band, no gradient, no blur */}
+      <div className="absolute bottom-0 inset-x-0 bg-white border-t border-wine-100">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {CLINIC.stats.map((s) => (
             <div key={s.label} className="flex flex-col gap-0.5">
-              <span className="font-display text-3xl text-white">{s.value}</span>
-              <span className="font-data text-[11px] uppercase tracking-[0.18em] text-white/55">
+              <span className="font-display text-3xl text-wine-900">{s.value}</span>
+              <span className="font-data text-[11px] uppercase tracking-[0.18em] text-wine-500">
                 {s.label}
               </span>
             </div>
