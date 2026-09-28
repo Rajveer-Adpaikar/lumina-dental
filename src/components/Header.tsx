@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useBooking } from '../booking';
 import { CLINIC } from '../config';
+
+const NAV = [
+  { to: '/treatments', label: 'Treatments' },
+  { to: '/dentists', label: 'Our Dentists' },
+  { to: '/results', label: 'Results' },
+  { to: '/cost', label: 'Cost' },
+  { to: '/contact', label: 'Visit' },
+];
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,10 +19,8 @@ export default function Header() {
   const openBooking = useBooking();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -22,36 +28,53 @@ export default function Header() {
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-pearl/90 backdrop-blur-md shadow-sm py-2.5 border-b border-pine-100'
+          ? 'bg-snow/90 backdrop-blur-md shadow-sm py-2.5 border-b border-wine-100'
           : 'bg-transparent py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo — pearl-smile monogram */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
+        {/* Logo — L monogram + wordmark */}
         <Link to="/" className="flex items-center gap-3 group">
           <span className="relative flex h-10 w-10 items-center justify-center">
-            <span className="smile-arch h-7 w-7 block rounded-t-full" aria-hidden="true" />
-            <span className="absolute bottom-[15%] h-1.5 w-5 rounded-full bg-pine-800" aria-hidden="true" />
+            <span className="smile-arch h-7 w-7 block" aria-hidden="true" />
           </span>
-          <span className="font-display text-2xl text-pine-950 group-hover:text-pine-700 transition-colors">
-            PearlSmile
+          <span className="hidden sm:block">
+            <span className="block font-display text-xl leading-none text-wine-950 group-hover:text-wine-700 transition-colors">
+              Lumina Dental
+            </span>
+            <span className="block font-data text-[10px] uppercase tracking-[0.25em] text-wine-500 mt-1">
+              Bengaluru
+            </span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          <a href="#services" className="text-sm font-medium text-pine-800 hover:text-pine-600 transition-colors">Services</a>
-          <a href="#dentists" className="text-sm font-medium text-pine-800 hover:text-pine-600 transition-colors">Our Dentists</a>
-          <a href="#clinic" className="text-sm font-medium text-pine-800 hover:text-pine-600 transition-colors">Visit Us</a>
+        <nav className="hidden md:flex items-center gap-7">
+          {NAV.map((n) => (
+            <NavLink
+              key={n.to}
+              to={n.to}
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors ${
+                  isActive ? 'text-blush-600' : 'text-wine-800 hover:text-wine-500'
+                }`
+              }
+            >
+              {n.label}
+            </NavLink>
+          ))}
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-5">
-          <a href={`tel:${CLINIC.phoneHref}`} className="flex items-center gap-2 text-sm font-semibold text-pine-800 hover:text-pine-600 transition-colors">
+        <div className="hidden md:flex items-center gap-4">
+          <a
+            href={`tel:${CLINIC.phoneHref}`}
+            className="flex items-center gap-2 text-sm font-semibold text-wine-800 hover:text-wine-500 transition-colors"
+          >
             <Phone className="w-4 h-4" />
             {CLINIC.phone}
           </a>
-          <button onClick={openBooking} className="px-6 py-2.5 rounded-full bg-pine-800 text-pearl text-sm font-semibold hover:bg-pine-700 transition-colors shadow-md shadow-pine-900/10">
+          <button onClick={openBooking} className="btn btn-primary">
             Book Appointment
           </button>
         </div>
@@ -59,7 +82,7 @@ export default function Header() {
         {/* Mobile Menu Toggle */}
         <button
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-          className="md:hidden p-2 -mr-2 text-pine-950"
+          className="md:hidden p-2 -mr-2 text-wine-950"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -73,18 +96,35 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-full left-0 w-full bg-pearl border-b border-pine-100 shadow-xl md:hidden"
+            className="absolute top-full left-0 w-full bg-snow border-b border-wine-100 shadow-xl md:hidden"
           >
             <div className="p-6 flex flex-col gap-4">
-              <a href="#services" className="text-lg font-medium text-pine-950" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
-              <a href="#dentists" className="text-lg font-medium text-pine-950" onClick={() => setIsMobileMenuOpen(false)}>Our Dentists</a>
-              <a href="#clinic" className="text-lg font-medium text-pine-950" onClick={() => setIsMobileMenuOpen(false)}>Visit Us</a>
-              <a href={`tel:${CLINIC.phoneHref}`} className="flex items-center gap-2 text-lg font-medium text-pine-800" onClick={() => setIsMobileMenuOpen(false)}>
+              {NAV.map((n) => (
+                <NavLink
+                  key={n.to}
+                  to={n.to}
+                  className="text-lg font-medium text-wine-950"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {n.label}
+                </NavLink>
+              ))}
+              <a
+                href={`tel:${CLINIC.phoneHref}`}
+                className="flex items-center gap-2 text-lg font-medium text-wine-800"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
                 <Phone className="w-5 h-5" />
                 {CLINIC.phone}
               </a>
-              <hr className="border-pine-100 my-2" />
-              <button onClick={() => { setIsMobileMenuOpen(false); openBooking(); }} className="w-full text-center py-3 text-lg font-medium text-pearl bg-pine-800 rounded-xl shadow-md shadow-pine-900/10">
+              <hr className="border-wine-100 my-2" />
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openBooking();
+                }}
+                className="btn btn-primary w-full"
+              >
                 Book Appointment
               </button>
             </div>

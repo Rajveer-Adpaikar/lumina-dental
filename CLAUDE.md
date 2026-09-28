@@ -1,58 +1,50 @@
-# PearlSmile Dental Care (pearlsmile-dental)
+# Lumina Dental & Implant Studio (lumina-dental)
 
 React 19 + Vite 6 + TypeScript + Tailwind CSS v4 + motion + react-router-dom v7.
-A demo/fictional clinic website for **PearlSmile Dental Care**, Panaji, Goa. All clinic
-data is fictional (see `PearlSmile_Dental_Demo_Data.pdf`). Branding says **PearlSmile** —
-never revert to the old "Demo-Dental.com" (this fork replaced it) and never call it
-"AI/virtual dentistry" — it's a physical Goan clinic, not a SaaS.
+A demo/fictional clinic website for **Lumina Dental & Implant Studio**, Bengaluru.
+All clinic data is fictional (see `Dental_Final_Demo_3_Client_Brief.pdf`). Branding
+says **Lumina** — a physical Bengaluru clinic, not a SaaS. This demo exists so the
+client can choose between this site and the PearlSmile (Goa) one.
 
 ## Stack & Run
 
 - Install: `npm install`
-- Dev server: `npm run dev` → **port 3100** (3000 is taken by another app, 3001 by a sibling project). Vite auto-picks the next free port if 3100 is busy.
+- Dev server: `npm run dev` → **port 5173** (3000/3100 are taken by other apps).
 - Typecheck / "lint": `npx tsc --noEmit` (no test suite)
 - Build: `npm run build` → `dist/`
-- Tailscale access: `http://100.78.185.52:3100/pearlsmile-dental/` (IP from `tailscale ip -4`)
+- Preview prod build: `npx vite preview --port 5173`
 
 ## Live Deployment (GitHub Pages)
 
-- **Live: https://rajveer-adpaikar.github.io/pearlsmile-dental/** — repo `Rajveer-Adpaikar/pearlsmile-dental`, Pages serves the `gh-pages` branch root
-- Redeploy after changes: `npm run build && npx gh-pages -d dist --dotfiles`, then push source to `main`. Pages auto-builds on push to `gh-pages` (Pages is already enabled for the repo).
-- `vite.config.ts` hardcodes `base: '/pearlsmile-dental/'` and `App.tsx` passes it to `<BrowserRouter basename={import.meta.env.BASE_URL}>` — these two must stay in sync. If the repo/site name ever changes, change BOTH or you get broken assets or "No routes matched".
-- Never use root-absolute hrefs (`/#services`) anywhere — they escape the `/pearlsmile-dental/` base on Pages. Use page-relative (`#services`). This bit Header/Footer nav once already.
-- Deep links like `/privacy-policy` 404 on refresh (no SPA fallback on Pages); client-side navigation works fine. Add the `404.html` redirect trick if direct legal-page links are ever needed.
+- **Live: https://rajveer-adpaikar.github.io/lumina-dental/** — repo `Rajveer-Adpaikar/lumina-dental`, Pages serves the `gh-pages` branch root
+- Redeploy after changes: `npm run build && npx gh-pages -d dist --dotfiles`, then push source to `main`. Pages auto-builds on push to `gh-pages`.
+- `vite.config.ts` hardcodes `base: '/lumina-dental/'` and `App.tsx` passes it to `<BrowserRouter basename={import.meta.env.BASE_URL}>` — these two must stay in sync. If the repo/site name ever changes, change BOTH or you get broken assets or "No routes matched".
+- Never use root-absolute hrefs (`/#treatments`) anywhere — they escape the `/lumina-dental/` base on Pages. Use page-relative routes (`/treatments`).
+- Multi-page SPA: `/`, `/treatments`, `/dentists`, `/results`, `/cost`, `/faq`, `/contact`. Deep links work via the `404.html` trick (serves the app, router resolves the path or NotFound).
 - CDN lag is real: right after publishing, Pages can serve a stale bundle for a couple minutes. Poll for the new hashed asset name in curl'd HTML before concluding a deploy failed.
 
 ## Data & Content
 
-- `src/config.ts` — single source of truth: `CLINIC` object (name, tagline, address, phone, email, `hours[]`, `dentists[]`, `services[]` (4 categories with items), `stats[]`). **All data lives here** — edit it to change the site's content, not the components. Also `CAL_COM_URL` (Cal.com slug, `"envoyc/demo-dental"`; if emptied the booking modal shows a "coming soon" panel) and the exported `CONTACT_EMAIL` / `EMERGENCY_PHONE`.
-- Phone numbers must be dummy values — a realistic-looking number turned out to be someone's real number in this project's history. Current values: `+91 832 245 7812` (fictional).
-- Sections: `Hero` → `Features` (#services, the 4 service categories) → `Dentists` (#dentists, 3 doctors from config) → `ClinicInfo` (#clinic, hours table + address/contact + stats band).
-- Legal pages at `/privacy-policy`, `/terms-of-service`, `/hipaa` — all source their branding from `CLINIC`.
+- `src/config.ts` — single source of truth: `CLINIC` object (name, tagline, address, phone, whatsappLink, email, `hours[]`, `dentists[]`, `services[]` (6 categories), `stats[]`, `reviews[]`, `gallery[]`, `faqs[]`, `beforeAfter[]`, `calLink`, `images` — verified Unsplash URLs).
+- Phone numbers must be dummy values (`+91 80 4587 2196`, fictional). All emails use `.example`.
+- Home flow (per brief §9): Hero → Trust → Dentists → Treatments → Why Us → Before/After → Reviews → Emergency CTA → Cost Enquiry → FAQ → Gallery → Location → Booking → Footer.
+- Components in `src/components/`, pages in `src/pages/`. Sections reused across subpages.
 
-## Booking
+## Design System ("Lumina Rose")
 
-- `src/booking.tsx` — `BookingProvider` wraps the app in `App.tsx`; components call `useBooking()` → opens `BookingModal`.
-- Booking buttons across Header/Hero/Footer all route through `openBooking()`.
-- `src/components/BookingModal.tsx` — Cal.com **inline embed** (official loader IIFE injected once per page load, calendar mounts into a container div on every open). Do NOT swap back to a plain `<iframe src>`.
-- Modal must stay ≥ ~900px wide (`max-w-5xl`). At `max-w-3xl` (768px) Cal's month_view collapses into one narrow column. Verify embed renders by checking for `cal-inline` custom element + inner iframe in Playwright (`browser_evaluate`), not screenshots.
-
-## Design System ("Pearl & Pine")
-
-- Palette (Tailwind v4 `@theme` tokens in `src/index.css`):
-  - `pine` (deep clinic green, primary; `pine-950` #0b1f13 → `pine-50`)
-  - `pearl` (#f6f4ee warm pearl background)
-  - `gold` (champagne accent, used sparingly; `gold-400` #e2c078)
-  - `ocean` (dark navy-mist, defined but currently unused)
-- Type: `Instrument Serif` (`font-display`, editorial display headings) + `Figtree` (`font-sans`, body) + `IBM Plex Mono` (`font-data`, clinical data like hours/stats). Imported in `src/index.css` via Google Fonts.
-- Signature motif: **smile-arch** — a gold circular arch + smile line (`.smile-arch` CSS class) used as the logo monogram and repeated in the Dentists section.
-- Design rules that keep this site from drifting back to the old SaaS look: no teal/slate, no gradient text, no `background-clip: text`, no card-grid-of-icons uniformity (services are editorial numbered rows), no "Smart Scan" / AI-copy anywhere.
-- The impeccable design hook flags SmartScan-style `border-[8px]` as side-tab/border-accent — N/A now (component was deleted). The `overused-font` rule flags `src/index.css` L1 — false positive: Instrument Serif / Figtree / IBM Plex Mono are not on the guarded list.
+- Palette (Tailwind v4 `@theme` tokens in `src/index.css`), anchored on impeccable seed-198 (rose/plum, hue 340°):
+  - `wine` (deep plum-primary; `wine-950` ≈ #2a0a18 → `wine-50`)
+  - `blush` (rose accent — emergency CTA, highlights)
+  - `gold` (champagne accent — branded CTAs, smile-arch)
+  - `snow` / `porcelain` (pure white + faint plum-tinted surface), `ink` (plum-tinted near-black text)
+- Type: **Bodoni Moda** (`font-display`) + **Archivo** (`font-sans`) + **Spline Sans Mono** (`font-data`).
+- Signature motif: **smile-arch** (`.smile-arch` CSS class) — gold circular arch + smile line, used as the logo monogram and on the 404 page.
+- Mobile: sticky bottom bar (Call | WhatsApp | Book) — `.sticky-bar`, hidden ≥768px. Booking modal is `z-[60]` so it sits above it.
 
 ## Gotchas
 
-- Footer/nav anchors: `#services`, `#dentists`, `#clinic` exist. There is NO `#providers` or `#smart-scan` — link to the real sections.
-- Floating hero chips (17,000+ / 3 specialists) use negative offsets — keep `-right-*` / `-left-*` ≥ -3 on mobile or they go off-screen.
-- Touch targets: footer links use `py-2`+ padding to stay ≥40px tall — preserve when editing.
-- Mobile QA method that works here: Playwright `browser_resize` + `browser_evaluate` measuring `getBoundingClientRect()` against `window.innerWidth` (skip elements under `pointer-events-none`). DOM measurement via `browser_evaluate` is the reliable check; screenshots saved to `.playwright-mcp/` are often unreadable in this environment.
+- The old PearlSmile repo lives at `Rajveer-Adpaikar/pearlsmile-dental` — keep them separate. This repo's git origin must stay `lumina-dental`.
+- The Cost Enquiry form opens WhatsApp with the prefilled message — there's no backend in the demo.
+- Before/after gallery uses verified Unsplash stock photos + a "demo imagery" caveat; swap in real case photos before showing the client.
+- Booking modal needs ≥ ~900px width (`max-w-5xl`) or Cal's month view collapses. Verify with `cal-inline` custom element + inner iframe, not screenshots.
 - `.playwright-mcp/` is gitignored; the repo also ignores `.impeccable/`, `dist/`, `node_modules/`, `.env*`.

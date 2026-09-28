@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CAL_COM_URL, CONTACT_EMAIL } from '../config';
+import { CLINIC, CONTACT_EMAIL } from '../config';
 
 // Cal.com inline embed. The loader script is injected once per page load; the
 // "inline" instruction re-runs on each modal open so the calendar remounts
 // into the fresh container.
-const CAL_NS = 'demo-dental';
+const CAL_NS = 'lumina-dental';
 
 function loadCalScript() {
   const w = window as any;
@@ -56,7 +56,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open || !CAL_COM_URL) return;
+    if (!open || !CLINIC.calLink) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);
     loadCalScript();
@@ -68,7 +68,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
     Cal.ns[CAL_NS]('inline', {
       elementOrSelector: '#cal-inline-container',
       config: { layout: 'month_view', useSlotsViewOnSmallScreen: 'true' },
-      calLink: CAL_COM_URL,
+      calLink: CLINIC.calLink,
     });
     Cal.ns[CAL_NS]('ui', { hideEventTypeDetails: false, layout: 'month_view' });
     return () => window.removeEventListener('keydown', onKey);
@@ -81,7 +81,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] bg-pine-950/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[60] bg-wine-950/80 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
@@ -89,18 +89,18 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl overflow-hidden"
+            className="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 border border-pine-100 flex items-center justify-center text-pine-900/70 hover:text-pine-950 hover:bg-white transition-colors shadow-sm"
+              className="absolute top-3 right-3 z-50 w-10 h-10 rounded-full bg-white/90 border border-wine-100 flex items-center justify-center text-wine-900/70 hover:text-wine-950 hover:bg-white transition-colors shadow-sm"
               aria-label="Close booking"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {CAL_COM_URL ? (
+            {CLINIC.calLink ? (
               <div
                 id="cal-inline-container"
                 ref={containerRef}
@@ -108,11 +108,13 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
               />
             ) : (
               <div className="p-12 text-center">
-                <div className="text-5xl mb-4">🦷</div>
-                <h3 className="text-2xl font-bold text-pine-950 mb-2">Booking is almost ready</h3>
-                <p className="text-pine-900/60 max-w-md mx-auto">
+                <div className="mb-4 flex justify-center">
+                  <span className="smile-arch !w-16 !h-16" aria-hidden="true" />
+                </div>
+                <h3 className="font-display text-2xl text-wine-950 mb-2">Booking is almost ready</h3>
+                <p className="text-wine-900/60 max-w-md mx-auto">
                   We're hooking up our online calendar right now. In the meantime, reach us at{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-pine-700 font-semibold hover:underline">
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-wine-700 font-semibold hover:underline">
                     {CONTACT_EMAIL}
                   </a>{' '}
                   and we'll schedule your visit personally.

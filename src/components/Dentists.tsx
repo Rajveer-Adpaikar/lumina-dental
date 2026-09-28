@@ -1,64 +1,63 @@
 import { motion } from 'motion/react';
 import { CLINIC } from '../config';
 
+const HERO_IMAGES = {
+  NR: 'dentistNisha',
+  AM: 'dentistArjun',
+  TM: 'dentistTara',
+} as const;
+
 export default function Dentists() {
   return (
-    <section id="dentists" className="py-24 lg:py-32 bg-pine-950 text-pearl relative overflow-hidden">
-      {/* Decorative glow */}
-      <div
-        aria-hidden="true"
-        className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] max-w-[640px] max-h-[640px] rounded-full bg-pine-800/50 blur-3xl opacity-70 pointer-events-none"
-      />
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="max-w-2xl mb-16">
-          <p className="font-data text-xs uppercase tracking-[0.25em] text-gold-400 mb-4">
-            PearlSmile · The team
-          </p>
-          <h2 className="font-display text-4xl lg:text-6xl text-pearl leading-[1.05]">
-            Three dentists,
-            <br />
-            <span className="text-pearl/80 italic">no hand-offs in the hall.</span>
+    <section id="dentists" className="py-20 sm:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="max-w-2xl mb-12">
+          <h2 className="font-display text-4xl sm:text-5xl text-wine-950">
+            Three specialists. One plan for your smile.
           </h2>
-          <p className="mt-6 text-lg text-pearl/70 leading-relaxed">
-            Every patient is under one consultant's eye end to end — from the first
-            examination to the final polish.
+          <p className="mt-4 text-lg text-wine-800">
+            Meet the team who'll be looking after you — each one qualified, focused, and
+            careful about explaining every step.
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {CLINIC.dentists.map((dentist, idx) => (
+          {CLINIC.dentists.map((d, i) => (
             <motion.article
-              key={dentist.name}
-              initial={{ opacity: 0, y: 24 }}
+              key={d.initials}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ delay: idx * 0.12, duration: 0.55, ease: 'easeOut' }}
-              className="bg-pine-900/60 border border-pine-800 rounded-2xl p-8 flex flex-col h-full group hover:border-gold-500/40 transition-colors"
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="panel overflow-hidden hover:shadow-lg hover:shadow-wine-900/5 transition-shadow"
             >
-              {/* Smile-arch monogram */}
-              <div className="relative flex h-16 w-16 items-center justify-center mb-7">
-                <span className="smile-arch h-11 w-11 block rounded-t-full border-gold-500/70" aria-hidden="true" />
-                <span className="absolute bottom-[18%] h-2 w-8 rounded-full bg-gold-400" aria-hidden="true" />
+              <div className="aspect-[4/5] overflow-hidden bg-porcelain">
+                <img
+                  src={CLINIC.images[HERO_IMAGES[d.initials]]}
+                  alt={d.name}
+                  className="w-full h-full object-cover object-top"
+                  loading="lazy"
+                />
               </div>
-
-              <h3 className="font-display text-2xl text-pearl mb-1">{dentist.name}</h3>
-              <p className="font-data text-sm text-gold-400 mb-5">{dentist.specialty}</p>
-
-              <p className="text-sm text-pearl/60 leading-relaxed mb-7">
-                {dentist.qual} · {dentist.experience} experience
-              </p>
-
-              <dl className="mt-auto grid grid-cols-2 gap-x-4 gap-y-6 pt-6 border-t border-pine-800">
-                <div>
-                  <dt className="text-xs text-pearl/50 uppercase tracking-wider mb-1">Patients</dt>
-                  <dd className="font-data text-2xl text-pearl">{dentist.patients}</dd>
+              <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-display text-2xl text-wine-950">{d.name}</h3>
                 </div>
-                <div>
-                  <dt className="text-xs text-pearl/50 uppercase tracking-wider mb-1">Experience</dt>
-                  <dd className="font-data text-2xl text-pearl">{dentist.experience}</dd>
+                <p className="mt-1 font-data text-xs uppercase tracking-[0.18em] text-blush-600">
+                  {d.specialty}
+                </p>
+                <p className="mt-3 text-sm text-wine-800 leading-relaxed">{d.blurb}</p>
+                <div className="mt-5 flex gap-6 border-t border-wine-100 pt-4 text-sm">
+                  <span className="text-wine-600">
+                    <span className="font-display text-xl text-wine-950 block">{d.experience}</span>
+                    Experience
+                  </span>
+                  <span className="text-wine-600">
+                    <span className="font-display text-xl text-wine-950 block">{d.patients}</span>
+                    Patients
+                  </span>
                 </div>
-              </dl>
+              </div>
             </motion.article>
           ))}
         </div>

@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { Phone, MessageCircle, CalendarCheck } from 'lucide-react';
 import { useBooking } from '../booking';
 import { CLINIC } from '../config';
 
@@ -7,91 +7,71 @@ export default function Hero() {
   const openBooking = useBooking();
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-pearl">
-      {/* Decorative pearl-glow shapes */}
-      <div
-        aria-hidden="true"
-        className="absolute top-0 left-1/4 w-[64vw] h-[64vw] max-w-[820px] max-h-[820px] rounded-full bg-pine-200/40 blur-3xl opacity-70 pointer-events-none"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute bottom-[-10%] right-[-6%] w-[40vw] h-[40vw] max-w-[520px] max-h-[520px] rounded-full bg-gold-300/30 blur-3xl opacity-60 pointer-events-none"
-      />
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-wine-950 text-white">
+      {/* backdrop image */}
+      <div className="absolute inset-0">
+        <img
+          src={CLINIC.images.hero}
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover opacity-40"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-wine-950 via-wine-950/75 to-wine-900/30" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-2xl"
+        >
+          <p className="font-data text-xs uppercase tracking-[0.3em] text-blush-300 mb-6">
+            Est. {CLINIC.established} · {CLINIC.city}
+          </p>
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] text-white">
+            Modern Dentistry.
+            <span className="block text-blush-200 italic">Exceptional Care.</span>
+          </h1>
+          <p className="mt-6 text-lg text-white/75 max-w-md leading-relaxed">
+            Implants, root canals, cosmetic and family dentistry — cared for by three
+            specialists under one roof in {CLINIC.city}.
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="max-w-2xl"
-          >
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-pine-50 text-pine-800 rounded-full text-xs font-semibold tracking-wide mb-7">
-              <MapPin className="w-3.5 h-3.5 text-pine-600" />
-              Panaji, Goa
+          {/* CTA cluster */}
+          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <button onClick={openBooking} className="btn btn-gold !text-wine-950">
+              <CalendarCheck className="w-5 h-5" />
+              Book an Appointment
+            </button>
+            <a href={CLINIC.whatsappLink} target="_blank" rel="noreferrer" className="btn btn-whatsapp">
+              <MessageCircle className="w-5 h-5" />
+              WhatsApp the Clinic
+            </a>
+            <a href={`tel:${CLINIC.phoneHref}`} className="btn btn-emergency">
+              <Phone className="w-5 h-5" />
+              Emergency · Call Now
+            </a>
+          </div>
+
+          <p className="mt-6 font-data text-xs text-white/50">
+            4.9/5 average rating · 24,000+ patients since {CLINIC.established}
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Trust bar */}
+      <div className="absolute bottom-0 inset-x-0 bg-white/5 backdrop-blur-md border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {CLINIC.stats.map((s) => (
+            <div key={s.label} className="flex flex-col gap-0.5">
+              <span className="font-display text-3xl text-white">{s.value}</span>
+              <span className="font-data text-[11px] uppercase tracking-[0.18em] text-white/55">
+                {s.label}
+              </span>
             </div>
-
-            <h1 className="font-display text-5xl lg:text-[5.5rem] leading-[1.02] text-pine-950 mb-7">
-              Healthy Smiles.
-              <br />
-              <span className="text-pine-700 italic">Confident You.</span>
-            </h1>
-
-            <p className="text-lg lg:text-xl text-pine-900/75 mb-9 leading-relaxed max-w-lg">
-              General, root canal &amp; cosmetic dentistry in the heart of Panaji —
-              three in-house specialists, one calm room, and care that starts with listening.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <a href="#services" className="w-full sm:w-auto px-8 py-4 rounded-full bg-pine-800 text-pearl font-bold text-lg hover:bg-pine-700 transition-colors flex items-center justify-center gap-2 group">
-                Explore our services
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <button onClick={openBooking} className="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-pine-900 font-bold text-lg border border-pine-200 hover:border-pine-300 hover:bg-white/70 transition-colors">
-                Book an appointment
-              </button>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
-            className="relative lg:h-[600px] flex items-center justify-center"
-          >
-            <div className="relative w-full max-w-md mx-auto">
-              <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-tr from-pine-700 to-pine-400 rounded-[2.5rem] blur-2xl opacity-25 transform rotate-3" />
-              <img
-                src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="A smiling patient with healthy teeth"
-                className="relative z-10 w-full h-[480px] object-cover rounded-[2.5rem] shadow-2xl border border-white/60"
-              />
-
-              {/* Floating stat chip */}
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.5, ease: 'easeOut' }}
-                className="absolute top-10 -right-3 sm:-right-10 z-20 bg-white p-4 pr-5 rounded-2xl shadow-xl border border-pine-100"
-              >
-                <div className="font-data text-2xl font-semibold text-pine-800">17,000+</div>
-                <div className="text-xs font-medium text-pine-900/60">patients treated</div>
-              </motion.div>
-
-              {/* Floating specialty chip */}
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9, duration: 0.5, ease: 'easeOut' }}
-                className="absolute bottom-12 -left-3 sm:-left-10 z-20 bg-white p-4 pr-5 rounded-2xl shadow-xl border border-pine-100"
-              >
-                <div className="font-data text-2xl font-semibold text-pine-800">3</div>
-                <div className="text-xs font-medium text-pine-900/60">in-house specialists</div>
-              </motion.div>
-            </div>
-          </motion.div>
-
+          ))}
         </div>
       </div>
     </section>

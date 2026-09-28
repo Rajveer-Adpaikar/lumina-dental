@@ -1,100 +1,188 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Archivo:ital,wght@0,100..900;1,100..900&family=Spline+Sans+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 /*
-  PearlSmile Dental Care — theme
-
-  Palette: Pearl & Pine (deliberate break from the teal SaaS look)
-    --ps-pine:   deep clinic-pine green (primary brand)
-    --ps-ocean:  deep navy-mist, used for dark marquee sections
-    --ps-gold:   champagne gold (accent, sparingly)
-    --ps-pearl:  warm pearl paper background
-  Type: Instrument Serif (display) · Figtree (body) · IBM Plex Mono (data)
+  Lumina Dental & Implant Studio — theme
+  Palette anchored on impeccable seed-198 (deep rose / plum, hue 340°).
+  OKLCH. White bg, no cream. Warmth lives in the plum + rose + gold accents.
 */
 @theme {
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: "Bodoni Moda", serif;
+  --font-sans: "Archivo", sans-serif;
+  --font-data: "Spline Sans Mono", monospace;
 
-  --color-pine-50:  #f2f7f3;
-  --color-pine-100: #e0ede2;
-  --color-pine-200: #c2dcc7;
-  --color-pine-300: #97c2a0;
-  --color-pine-400: #67a175;
-  --color-pine-500: #478856;
-  --color-pine-600: #356c43;
-  --color-pine-700: #2b5838;
-  --color-pine-800: #24472f;
-  --color-pine-900: #1c3a27;
-  --color-pine-950: #0b1f13;
+  /* wine — deep plum, primary */
+  --color-wine-50: oklch(0.965 0.025 340);
+  --color-wine-100: oklch(0.932 0.048 340);
+  --color-wine-200: oklch(0.878 0.090 340);
+  --color-wine-300: oklch(0.815 0.132 340);
+  --color-wine-400: oklch(0.735 0.176 340);
+  --color-wine-500: oklch(0.640 0.200 340);
+  --color-wine-600: oklch(0.560 0.190 340);
+  --color-wine-700: oklch(0.470 0.168 340);
+  --color-wine-800: oklch(0.375 0.134 340);
+  --color-wine-900: oklch(0.300 0.110 340);
+  --color-wine-950: oklch(0.215 0.080 340);
 
-  --color-pearl: #f6f4ee;
-  --color-gold-300: #eed9a4;
-  --color-gold-400: #e2c078;
-  --color-gold-500: #d3a54f;
-  --color-gold-600: #b8873a;
-  --color-gold-700: #96702c;
+  /* blush — rose accent, used sparingly */
+  --color-blush-100: oklch(0.955 0.040 20);
+  --color-blush-200: oklch(0.928 0.068 15);
+  --color-blush-300: oklch(0.892 0.105 10);
+  --color-blush-400: oklch(0.845 0.145 5);
+  --color-blush-500: oklch(0.780 0.175 355);
+  --color-blush-600: oklch(0.700 0.195 348);
 
-  --color-ocean-950: #09141d;
-  --color-ocean-900: #0f1f2b;
-  --color-ocean-800: #18303f;
+  /* gold — champagne accent */
+  --color-gold-300: oklch(0.860 0.130 88);
+  --color-gold-400: oklch(0.810 0.150 86);
+  --color-gold-500: oklch(0.750 0.165 84);
+  --color-gold-600: oklch(0.660 0.150 82);
+
+  /* surfaces & ink */
+  --color-snow: oklch(1.000 0.000 0);
+  --color-porcelain: oklch(0.975 0.012 340);
+  --color-ink: oklch(0.250 0.040 340);
+  --color-ink-soft: oklch(0.420 0.045 340);
+  --color-mist: oklch(0.880 0.030 340);
 }
 
+/* ---------- base ---------- */
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: var(--font-sans);
-  background: var(--color-pearl);
-  color: var(--color-pine-950);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Display headings — editorial serif */
-.font-display {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-}
-
-/* Data labels — clinical mono */
-.font-data {
-  font-family: var(--font-mono);
-}
-
-/* The pearl-smile arch — signature motif: a circular arch line
-   echoing a dental arch / the clinic monogram. Used on hero + dentists. */
-.smile-arch {
-  border: 2px solid var(--color-gold-400);
-  border-bottom: none;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  position: relative;
-}
-
-/* Reveal-on-view base state: content is visible by default; the motion
-   wrapper animates transforms only, so nothing is ever gated on JS. */
-.reveal {
-  opacity: 1;
-  transform: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
   }
 }
 
-/* Visible keyboard focus */
-:focus-visible {
-  outline: 2px solid var(--color-gold-500);
-  outline-offset: 2px;
+body {
+  @apply bg-snow text-ink font-sans antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
+  background: var(--color-blush-200);
+  color: var(--color-wine-900);
+}
+
+/* ---------- type helpers ---------- */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+.display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.data {
+  font-family: var(--font-data);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- signature motif: smile-arch ---------- */
+.smile-arch {
+  display: inline-block;
+  border-radius: 9999px;
+  border: 2px solid var(--color-gold-400);
+  width: 2.5em;
+  height: 2.5em;
+  position: relative;
+}
+.smile-arch::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 32%;
+  height: 1.5px;
   background: var(--color-gold-400);
-  color: var(--color-pine-950);
+  border-radius: 9999px;
+}
+
+/* arch outline used as section divider motif */
+.arch-ring {
+  border: 1.5px solid var(--color-wine-200);
+  border-radius: 9999px;
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all duration-200 select-none;
+}
+.btn-primary {
+  @apply bg-wine-800 text-white hover:bg-wine-900 px-6 py-3 text-sm;
+}
+.btn-gold {
+  @apply bg-gold-400 text-ink hover:bg-gold-300 px-6 py-3 text-sm;
+}
+.btn-ghost {
+  @apply border border-wine-300 text-wine-900 hover:bg-wine-50 px-6 py-3 text-sm;
+}
+.btn-emergency {
+  @apply bg-blush-600 text-white hover:bg-blush-500 px-6 py-3 text-sm;
+}
+.btn-whatsapp {
+  @apply bg-wine-600 text-white hover:bg-wine-500 px-6 py-3 text-sm;
+}
+
+/* ---------- cards / panels ---------- */
+.panel {
+  @apply bg-white border border-wine-100 rounded-2xl;
+}
+
+/* numbered dossier rows — format the sequence list */
+.dossier-item {
+  @apply border-t border-wine-100 py-8;
+}
+
+/* ---------- mobile sticky bar ---------- */
+.sticky-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: var(--color-snow);
+  border-top: 1px solid var(--color-wine-100);
+}
+@media (min-width: 768px) {
+  .sticky-bar {
+    display: none;
+  }
+}
+
+/* Wait — the skiplink */
+.skiplink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--color-wine-900);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 0.5rem 0;
+}
+.skiplink:focus {
+  left: 0;
 }
