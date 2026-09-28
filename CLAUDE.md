@@ -41,10 +41,25 @@ client can choose between this site and the PearlSmile (Goa) one.
 - Signature motif: **smile-arch** (`.smile-arch` CSS class) — gold circular arch + smile line, used as the logo monogram and on the 404 page.
 - Mobile: sticky bottom bar (Call | WhatsApp | Book) — `.sticky-bar`, hidden ≥768px. Booking modal is `z-[60]` so it sits above it.
 
+## Recent fixes (resume point)
+
+- **Header is ALWAYS solid white** (`bg-white` + `border-b border-wine-100`) at every scroll position — it does NOT start transparent. Scrolling only toggles `shadow-sm`. The old transparent-over-hero header caused invisible nav text and the "wine ribbon that fades to white" complaint. Do not revert to `bg-transparent` at the top of `src/components/Header.tsx`.
+- **Hero trust band is in normal flow** (NOT `absolute bottom-0`) — it's a `relative bg-white` strip after the content, so it never overlaps the CTAs on short phones.
+- Hero heading uses `text-[2.6rem] ... text-balance sm:text-6xl lg:text-7xl` so it doesn't clip at 320px.
+- Verified via Playwright: header bg `rgb(255,255,255)` at top + after scroll (blur none); zero horizontal overflow on all 7 routes at 320/375px; mobile menu shows all 5 nav items; sticky bar spans full width bottom.
+
 ## Gotchas
 
 - The old PearlSmile repo lives at `Rajveer-Adpaikar/pearlsmile-dental` — keep them separate. This repo's git origin must stay `lumina-dental`.
 - The Cost Enquiry form opens WhatsApp with the prefilled message — there's no backend in the demo.
 - Before/after gallery uses verified Unsplash stock photos + a "demo imagery" caveat; swap in real case photos before showing the client.
 - Booking modal needs ≥ ~900px width (`max-w-5xl`) or Cal's month view collapses. Verify with `cal-inline` custom element + inner iframe, not screenshots.
+- `lucide-react` was bumped to ^1.48.0 in this repo — the original 0.546.0 build broke (`icons/index.js` missing). Keep it ≥1.x, or the build fails.
 - `.playwright-mcp/` is gitignored; the repo also ignores `.impeccable/`, `dist/`, `node_modules/`, `.env*`.
+
+## Where I left off
+
+All requested work is complete and deployed: multi-page Lumina site, distinct rose/plum design system, plain-white static header + white in-flow trust band, mobile sticky bar + overflow-safe layout, distinct 404, deployed to GitHub Pages (link above). Next session should:
+1. Pull latest (`git pull`) — origin is `lumina-dental`, main branch.
+2. `npm install` (uses `bun.lock` + `package-lock.json`; npm worked).
+3. For client presentation: swap in real dentist/case photos and a real Cal.com slug in `src/config.ts` (`calLink`, `images`), then rebuild + redeploy (commands above).
