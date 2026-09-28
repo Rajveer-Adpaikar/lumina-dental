@@ -61,8 +61,8 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Trust bar */}
-      <div className="absolute bottom-0 inset-x-0 bg-white/5 backdrop-blur-md border-t border-white/10">
+      {/* Trust bar — solid wine strip, no transparency/blur so it never shifts color */}
+      <div className="absolute bottom-0 inset-x-0 bg-wine-900 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {CLINIC.stats.map((s) => (
             <div key={s.label} className="flex flex-col gap-0.5">
