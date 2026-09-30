@@ -27,7 +27,7 @@ export default function Treatments() {
               className="dossier-item"
             >
               <div className="flex items-start gap-5">
-                <span className="font-data text-sm text-blush-600 pt-1">{s.num}</span>
+                <span className="label text-sm text-blush-600 pt-1">{s.num}</span>
                 <div className="flex-1">
                   <h3 className="font-display text-2xl text-wine-950">{s.title}</h3>
                   <p className="mt-1.5 text-sm text-wine-600">{s.blurb}</p>

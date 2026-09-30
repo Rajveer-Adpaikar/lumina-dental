@@ -1,39 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Archivo:ital,wght@0,100..900;1,100..900&family=Spline+Sans+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,400..700;1,400..700&display=swap');
 @import "tailwindcss";
 
 /*
   Lumina Dental & Implant Studio — theme
   Palette anchored on impeccable seed-198 (deep rose / plum, hue 340°).
   OKLCH. White bg, no cream. Warmth lives in the plum + rose + gold accents.
+
+  Contrast: every text token below clears WCAG AA (4.5:1) against snow/porcelain.
+  Verified with `node tools/contrast-check.mjs` — re-run after editing a ramp.
 */
 @theme {
-  --font-display: "Bodoni Moda", serif;
+  --font-display: "Alegreya", serif;
   --font-sans: "Archivo", sans-serif;
-  --font-data: "Spline Sans Mono", monospace;
 
-  /* wine — deep plum, primary */
+  /* wine — deep plum, primary.
+     500/600 are the darkest steps that still read as "wine" instead of black;
+     anything lighter fails AA on white, so don't use 400+ for text. */
   --color-wine-50: oklch(0.965 0.025 340);
   --color-wine-100: oklch(0.932 0.048 340);
   --color-wine-200: oklch(0.878 0.090 340);
   --color-wine-300: oklch(0.815 0.132 340);
-  --color-wine-400: oklch(0.735 0.176 340);
-  --color-wine-500: oklch(0.640 0.200 340);
+  --color-wine-400: oklch(0.573 0.176 340);
+  --color-wine-500: oklch(0.577 0.200 340);
   --color-wine-600: oklch(0.560 0.190 340);
   --color-wine-700: oklch(0.470 0.168 340);
   --color-wine-800: oklch(0.375 0.134 340);
   --color-wine-900: oklch(0.300 0.110 340);
   --color-wine-950: oklch(0.215 0.080 340);
 
-  /* blush — rose accent, used sparingly */
+  /* blush — rose accent, used sparingly.
+     500+ clear AA on white; 100–300 are for dark backgrounds only. */
   --color-blush-100: oklch(0.955 0.040 20);
   --color-blush-200: oklch(0.928 0.068 15);
   --color-blush-300: oklch(0.892 0.105 10);
-  --color-blush-400: oklch(0.845 0.145 5);
-  --color-blush-500: oklch(0.780 0.175 355);
-  --color-blush-600: oklch(0.700 0.195 348);
+  --color-blush-400: oklch(0.562 0.145 5);
+  --color-blush-500: oklch(0.574 0.175 355);
+  --color-blush-600: oklch(0.560 0.195 348);
+  --color-blush-700: oklch(0.470 0.195 348);
 
-  /* gold — champagne accent */
-  --color-gold-300: oklch(0.860 0.130 88);
+  /* gold — champagne accent. Surface only, never text: it carries
+     wine-950 on it at 9.5:1, and white text on it never clears AA. */
+  --color-gold-300: oklch(0.870 0.130 88);
   --color-gold-400: oklch(0.810 0.150 86);
   --color-gold-500: oklch(0.750 0.165 84);
   --color-gold-600: oklch(0.660 0.150 82);
@@ -67,6 +74,10 @@ html {
 body {
   @apply bg-snow text-ink font-sans antialiased;
   text-rendering: optimizeLegibility;
+  /* Body copy sits at 16px with generous leading — the old 14px/tight leading
+     on labels was a big part of why the site read as cramped. */
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 ::selection {
@@ -80,19 +91,28 @@ h2,
 h3,
 h4 {
   text-wrap: balance;
+  /* Alegreya carries more body than the previous Didone, so 500 is the
+     display weight here — enough presence without shouting. */
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 p {
   text-wrap: pretty;
 }
 
+/* Display face, sized fluidly and capped at 6rem per the type ceiling. */
 .display {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
-.data {
-  font-family: var(--font-data);
-  letter-spacing: 0.02em;
+/* Small caps-style label: Archivo at 600 with real tracking. The old
+   font-data/mono treatment made every label thin and hard to read. */
+.label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 /* ---------- signature motif: smile-arch ---------- */
@@ -127,23 +147,27 @@ p {
 }
 
 /* ---------- buttons ---------- */
+/* min-height keeps every CTA a comfortable touch target. */
 .btn {
   @apply inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all duration-200 select-none;
+  min-height: 44px;
 }
 .btn-primary {
-  @apply bg-wine-800 text-white hover:bg-wine-900 px-6 py-3 text-sm;
+  @apply bg-wine-800 text-white hover:bg-wine-900 px-6 py-3 text-[0.9375rem];
 }
 .btn-gold {
-  @apply bg-gold-400 text-ink hover:bg-gold-300 px-6 py-3 text-sm;
+  /* wine-950 on gold-400 = 9.5:1 */
+  @apply bg-gold-400 text-wine-950 hover:bg-gold-300 px-6 py-3 text-[0.9375rem];
 }
 .btn-ghost {
-  @apply border border-wine-300 text-wine-900 hover:bg-wine-50 px-6 py-3 text-sm;
+  @apply border border-wine-300 text-wine-900 hover:bg-wine-50 px-6 py-3 text-[0.9375rem];
 }
 .btn-emergency {
-  @apply bg-blush-600 text-white hover:bg-blush-500 px-6 py-3 text-sm;
+  /* blush-700 as a surface clears AA with white text (4.6:1) */
+  @apply bg-blush-700 text-white hover:bg-blush-600 px-6 py-3 text-[0.9375rem];
 }
 .btn-whatsapp {
-  @apply bg-wine-600 text-white hover:bg-wine-500 px-6 py-3 text-sm;
+  @apply bg-wine-600 text-white hover:bg-wine-500 px-6 py-3 text-[0.9375rem];
 }
 
 /* ---------- cards / panels ---------- */
@@ -172,7 +196,7 @@ p {
   }
 }
 
-/* Wait — the skiplink */
+/* the skiplink */
 .skiplink {
   position: absolute;
   left: -9999px;
@@ -185,4 +209,11 @@ p {
 }
 .skiplink:focus {
   left: 0;
+}
+
+/* ---------- focus ---------- */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-wine-600);
+  outline-offset: 2px;
+  border-radius: 2px;
 }

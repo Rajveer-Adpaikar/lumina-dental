@@ -24,7 +24,7 @@ export default function FAQ() {
             >
               <summary className="flex items-center justify-between gap-4 cursor-pointer px-6 py-5 font-semibold text-wine-950 list-none [&::-webkit-details-marker]:hidden">
                 {f.q}
-                <span className="font-data text-xl text-blush-500 transition-transform group-open:rotate-45">
+                <span className="text-2xl leading-none text-blush-600 transition-transform group-open:rotate-45">
                   +
                 </span>
               </summary>

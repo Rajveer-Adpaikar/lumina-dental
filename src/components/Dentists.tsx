@@ -43,7 +43,7 @@ export default function Dentists() {
                 <div className="flex items-center justify-between">
                   <h3 className="font-display text-2xl text-wine-950">{d.name}</h3>
                 </div>
-                <p className="mt-1 font-data text-xs uppercase tracking-[0.18em] text-blush-600">
+                <p className="mt-1 label text-xs text-blush-600">
                   {d.specialty}
                 </p>
                 <p className="mt-3 text-sm text-wine-800 leading-relaxed">{d.blurb}</p>

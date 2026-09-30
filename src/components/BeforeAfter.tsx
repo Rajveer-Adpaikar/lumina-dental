@@ -20,7 +20,7 @@ export default function BeforeAfter() {
           </h2>
           <p className="mt-4 text-lg text-wine-800">
             Representative outcomes across veneers, whitening, implants and full makeovers.
-            <span className="block mt-2 font-data text-xs text-wine-400">
+            <span className="block mt-2 text-sm text-wine-500">
               Demo imagery — ask for real case photos before presenting to clients.
             </span>
           </p>
@@ -45,7 +45,7 @@ export default function BeforeAfter() {
                 />
               </div>
               <figcaption className="p-4">
-                <p className="font-data text-[11px] uppercase tracking-[0.16em] text-blush-600">
+                <p className="label text-[11px] text-blush-600">
                   {c.months}
                 </p>
                 <h3 className="mt-1 font-display text-lg text-wine-950">{c.title}</h3>

@@ -27,7 +27,7 @@ export default function BookingSection() {
                   'We confirm — you relax',
                 ].map((step, i) => (
                   <li key={step} className="flex items-center gap-4">
-                    <span className="font-data text-xl text-blush-600 w-8 shrink-0">{i + 1}</span>
+                    <span className="label text-xl text-blush-600 w-8 shrink-0">{i + 1}</span>
                     <span className="text-wine-900">{step}</span>
                   </li>
                 ))}
@@ -48,7 +48,7 @@ export default function BookingSection() {
                 <Phone className="w-5 h-5" />
                 Emergency · Call Now
               </a>
-              <p className="mt-2 text-center font-data text-xs text-wine-400">
+              <p className="mt-2 text-center text-sm text-wine-500">
                 Confirmation by phone/WhatsApp on every booking
               </p>
             </div>

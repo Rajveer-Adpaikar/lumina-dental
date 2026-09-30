@@ -32,7 +32,7 @@ export default function NotFound({ standalone = false }: { standalone?: boolean 
           </span>
         </div>
 
-        <p className="font-data text-xs uppercase tracking-[0.3em] text-blush-300 mb-5">
+        <p className="label text-xs text-blush-200 mb-5">
           Error 404 · Smile not found
         </p>
 

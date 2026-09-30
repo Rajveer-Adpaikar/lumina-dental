@@ -54,7 +54,7 @@ export default function Location() {
                     {CLINIC.hours.map((h) => (
                       <li key={h.day} className="flex items-center justify-between text-sm">
                         <span className="text-wine-700">{h.day}</span>
-                        <span className="font-data text-wine-900">{h.time}</span>
+                        <span className="text-wine-900">{h.time}</span>
                       </li>
                     ))}
                   </ul>

@@ -20,7 +20,7 @@ export default function Reviews() {
                     <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
-                <p className="mt-1.5 font-data text-xs uppercase tracking-[0.16em] text-wine-400">
+                <p className="mt-1.5 label text-xs text-wine-500">
                   Average of {CLINIC.stats[1].value} patients
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default function Reviews() {
                 <p className="text-wine-900 leading-relaxed">“{r.text}”</p>
                 <footer className="mt-4 flex items-center justify-between border-t border-wine-100 pt-3">
                   <span className="font-semibold text-wine-950">{r.name}</span>
-                  <span className="font-data text-[11px] uppercase tracking-[0.14em] text-wine-400">
+                  <span className="label text-[11px] text-wine-500">
                     {r.treatment}
                   </span>
                 </footer>

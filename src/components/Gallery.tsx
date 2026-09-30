@@ -35,7 +35,10 @@ export default function Gallery() {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-wine-950/80 to-transparent px-4 pt-10 pb-3 text-white text-sm font-medium">
+              {/* The scrim stays opaque under the text and only fades above it —
+                  an 80%-to-transparent ramp put white text at 4.48:1 on a bright
+                  photo, just under AA. */}
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-wine-950 from-45% to-transparent px-4 pt-10 pb-3 text-white text-sm font-medium">
                 {g.label}
               </figcaption>
             </motion.figure>

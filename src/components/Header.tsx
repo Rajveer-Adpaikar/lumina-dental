@@ -40,7 +40,7 @@ export default function Header() {
             <span className="block font-display text-xl leading-none text-wine-950 group-hover:text-wine-700 transition-colors">
               Lumina Dental
             </span>
-            <span className="block font-data text-[10px] uppercase tracking-[0.25em] text-wine-500 mt-1">
+            <span className="block label text-[10px] text-wine-500 mt-1">
               Bengaluru
             </span>
           </span>

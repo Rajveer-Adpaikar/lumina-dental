@@ -24,7 +24,7 @@ export default function Footer() {
               <span className="smile-arch" aria-hidden="true" />
               <div>
                 <p className="font-display text-xl leading-none">Lumina Dental</p>
-                <p className="font-data text-[10px] uppercase tracking-[0.28em] text-blush-300 mt-1">
+                <p className="label text-[10px] text-blush-200 mt-1">
                   Bengaluru
                 </p>
               </div>
@@ -37,7 +37,7 @@ export default function Footer() {
 
           {/* Explore */}
           <nav className="md:col-span-1" aria-label="Footer">
-            <p className="font-data text-xs uppercase tracking-[0.2em] text-blush-300 mb-4">
+            <p className="label text-xs text-blush-200 mb-4">
               Explore
             </p>
             <ul className="space-y-2.5">
@@ -53,7 +53,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="md:col-span-1">
-            <p className="font-data text-xs uppercase tracking-[0.2em] text-blush-300 mb-4">
+            <p className="label text-xs text-blush-200 mb-4">
               Contact
             </p>
             <ul className="space-y-3 text-sm">
@@ -84,14 +84,14 @@ export default function Footer() {
 
           {/* Hours + CTA */}
           <div className="md:col-span-1">
-            <p className="font-data text-xs uppercase tracking-[0.2em] text-blush-300 mb-4">
+            <p className="label text-xs text-blush-200 mb-4">
               Hours
             </p>
             <ul className="space-y-1.5 text-sm text-white/70">
               {CLINIC.hours.map((h) => (
                 <li key={h.day} className="flex justify-between gap-4">
                   <span>{h.day}</span>
-                  <span className="font-data text-white/80">{h.time}</span>
+                  <span className="text-white/80">{h.time}</span>
                 </li>
               ))}
             </ul>

@@ -120,7 +120,7 @@ export default function CostEnquiry() {
             <MessageCircle className="w-5 h-5" />
             Send Cost Enquiry
           </button>
-          <p className="mt-3 text-center font-data text-xs text-wine-400">
+          <p className="mt-3 text-center text-sm text-wine-500">
             Sends via WhatsApp — demo confirmation screen
           </p>
         </motion.form>

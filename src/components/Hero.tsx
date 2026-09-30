@@ -27,13 +27,13 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-2xl w-full"
         >
-          <p className="font-data text-xs uppercase tracking-[0.3em] text-blush-300 mb-6">
+          <p className="label text-xs text-blush-200 mb-6">
             Est. {CLINIC.established} · {CLINIC.city}
           </p>
-          <h1 className="font-display text-[2.6rem] leading-[1.02] text-white text-balance sm:text-6xl lg:text-7xl">Modern Dentistry.
+          <h1 className="font-display text-[2.6rem] leading-[1.05] text-white text-balance sm:text-6xl lg:text-7xl">Modern Dentistry.
             <span className="block text-blush-200 italic">Exceptional Care.</span>
           </h1>
-          <p className="mt-6 text-lg text-white/75 max-w-md leading-relaxed">
+          <p className="mt-6 text-lg text-white/85 max-w-md leading-relaxed">
             Implants, root canals, cosmetic and family dentistry — cared for by three
             specialists under one roof in {CLINIC.city}.
           </p>
@@ -54,7 +54,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <p className="mt-6 font-data text-xs text-white/50">
+          <p className="mt-6 text-sm text-white/75">
             4.9/5 average rating · 24,000+ patients since {CLINIC.established}
           </p>
         </motion.div>
@@ -66,7 +66,7 @@ export default function Hero() {
           {CLINIC.stats.map((s) => (
             <div key={s.label} className="flex flex-col gap-0.5">
               <span className="font-display text-3xl text-wine-900">{s.value}</span>
-              <span className="font-data text-[11px] uppercase tracking-[0.18em] text-wine-500">
+              <span className="label text-[11px] text-wine-500">
                 {s.label}
               </span>
             </div>

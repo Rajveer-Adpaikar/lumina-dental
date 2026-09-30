@@ -3,13 +3,13 @@ import { CLINIC } from '../config';
 
 export default function EmergencyCta() {
   return (
-    <section className="py-14 sm:py-16 bg-blush-600 text-white">
+    <section className="py-14 sm:py-16 bg-blush-700 text-white">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col md:flex-row items-center gap-6 justify-between">
         <div className="max-w-2xl">
           <h2 className="font-display text-3xl sm:text-4xl text-white">
             In pain? Don't wait it out.
           </h2>
-          <p className="mt-2 text-white/85">
+          <p className="mt-2 text-white/90">
             Severe pain, swelling, trauma or a broken tooth — call us now and we'll see you
             the same day wherever possible.
           </p>
