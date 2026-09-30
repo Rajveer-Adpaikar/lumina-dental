@@ -23,11 +23,35 @@ function ScrollToTop() {
   return null;
 }
 
+const ROUTE_TITLES: Record<string, string> = {
+  '/': 'Modern Dentistry. Exceptional Care.',
+  '/treatments': 'Treatments',
+  '/dentists': 'Our Dentists',
+  '/results': 'Results',
+  '/cost': 'Treatment Cost',
+  '/faq': 'FAQ',
+  '/contact': 'Contact & Visit',
+};
+
+// ponytail: GitHub Pages serves 404.html for every deep link, so the tab is
+// titled "Page not found" until the router mounts. This corrects it per route.
+function RouteTitle() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const key = pathname.replace(/\/+$/, '') || '/';
+    document.title = ROUTE_TITLES[key]
+      ? `${ROUTE_TITLES[key]} — Lumina Dental | Bengaluru`
+      : 'Page not found — Lumina Dental';
+  }, [pathname]);
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <BookingProvider>
         <ScrollToTop />
+        <RouteTitle />
         <a href="#main" className="skiplink">
           Skip to content
         </a>
