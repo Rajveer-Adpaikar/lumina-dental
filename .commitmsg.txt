@@ -1,9 +1,0 @@
-Set a per-route document title
-
-GitHub Pages serves 404.html for every deep link, so a hard refresh on
-/treatments rendered the correct page but titled the tab "Page not found",
-since 404.html hardcodes that title and nothing corrected it after mount.
-Adds a small RouteTitle effect keyed on pathname, including a real not-found
-title for unmatched routes.
-
-Co-Authored-By: Claude <noreply@anthropic.com>
