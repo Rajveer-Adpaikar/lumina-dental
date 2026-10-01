@@ -10,18 +10,39 @@ client can choose between this site and the PearlSmile (Goa) one.
 
 - Install: `npm install`
 - Dev server: `npm run dev` → **port 5173** (3000/3100 are taken by other apps).
+- **The site is served at `http://localhost:5173/lumina-dental/` — the subpath is
+  required.** `vite.config.ts` hardcodes `base: '/lumina-dental/'`, so a bare
+  `localhost:5173` 404s. That 404 is the base config working, not a broken server.
 - Typecheck / "lint": `npx tsc --noEmit` (no test suite)
 - Build: `npm run build` → `dist/`
 - Preview prod build: `npx vite preview --port 5173`
+- **Fastest check after any token/layout edit:** `node tools/contrast-check.mjs`
+  (exits non-zero on failure) → `npx tsc --noEmit` → `npm run build`.
 
 ## Live Deployment (GitHub Pages)
 
 - **Live: https://rajveer-adpaikar.github.io/lumina-dental/** — repo `Rajveer-Adpaikar/lumina-dental`, Pages serves the `gh-pages` branch root
-- Redeploy after changes: `npm run build && npx gh-pages -d dist --dotfiles`, then push source to `main`. Pages auto-builds on push to `gh-pages`.
+- Redeploy: `npm run build` → `npx gh-pages -d dist --dotfiles` → `git push origin main`.
+- **`GH_PAGES=1` does nothing in this repo.** `vite.config.ts` hardcodes
+  `base: '/lumina-dental/'` and never reads that env var (it is not referenced in
+  `vite.config.ts`, `package.json`, or `src/App.tsx` — verified). Setting it is a
+  harmless no-op; an older version of this file wrongly claimed it stamped the base.
+  Ignore it. To change the site name, edit `base` in `vite.config.ts` directly.
 - `vite.config.ts` hardcodes `base: '/lumina-dental/'` and `App.tsx` passes it to `<BrowserRouter basename={import.meta.env.BASE_URL}>` — these two must stay in sync. If the repo/site name ever changes, change BOTH or you get broken assets or "No routes matched".
 - Never use root-absolute hrefs (`/#treatments`) anywhere — they escape the `/lumina-dental/` base on Pages. Use page-relative routes (`/treatments`).
 - Multi-page SPA: `/`, `/treatments`, `/dentists`, `/results`, `/cost`, `/faq`, `/contact`. Deep links work via the `404.html` trick (serves the app, router resolves the path or NotFound).
-- CDN lag is real: right after publishing, Pages can serve a stale bundle for a couple minutes. Poll for the new hashed asset name in curl'd HTML before concluding a deploy failed.
+- **CDN lag is real** — measured 4 polls (~60s) and 6 polls (~90s) on two deploys.
+  Poll the raw HTML for the new hashed asset name before concluding a deploy failed:
+  `Invoke-WebRequest https://rajveer-adpaikar.github.io/lumina-dental/ | Select-String 'assets/index-\w+\.js'`
+- **Your browser will cache the old bundle even after the server has the new one.**
+  A stale page in Playwright is not proof of a failed deploy — check the raw HTML,
+  then hard-reload before investigating.
+- Git on Windows/PowerShell: a multi-line `git commit -m "..."` gets split into
+  separate arguments and fails. Write the message to a file and use
+  `git commit -F <file>`, and delete the file **before** `git add -A` or it lands in
+  the commit. (Cost one cleanup commit on 2026-09-30.)
+- `GH_PAGES`-free verification before publishing: confirm the built HTML carries
+  `/lumina-dental/` on every asset ref and that no `href="/` escapes the base.
 
 ## Data & Content
 
@@ -46,8 +67,8 @@ client can choose between this site and the PearlSmile (Goa) one.
   display sizes (it was the main reason the site read as illegible) and it codes
   fashion-editorial rather than clinical. Alegreya keeps a true italic for the
   "Exceptional Care." accent line and stays legible from 20px to 72px.
-  Candidate comparison that led to this choice: `tools/font-comparison.html`
-  (regenerate if you want to re-test; A=Source Serif 4 was the runner-up).
+  The A/B page that drove this choice has been deleted; regenerate a scratch
+  comparison if you ever want to re-test. Runner-up was Source Serif 4.
 - **There is no monospace font** — Spline Sans Mono was removed because every label
   was rendering as thin mono at 10–12px, which was the other half of the illegibility
   complaint. Use the `.label` utility (Archivo 600, 0.08em tracking, uppercase) for
@@ -61,7 +82,8 @@ client can choose between this site and the PearlSmile (Goa) one.
 
 Every text token clears WCAG AA (4.5:1) against **porcelain**, the darker of the two
 light backgrounds. Run `node tools/contrast-check.mjs` after touching a ramp in
-`src/index.css`; it exits non-zero on failure.
+`src/index.css`; it parses the real `@theme` values and exits non-zero on failure.
+Run it *before* `npm run build` — it is the fastest gate in the repo.
 
 - `wine-500/400`, `blush-500/400` are solved values — going lighter breaks AA.
 - `gold-*` is **surface-only**. It carries `wine-950` on it (9.9:1); white text on
@@ -70,6 +92,22 @@ light backgrounds. Run `node tools/contrast-check.mjs` after touching a ramp in
   the parent color. That bug made the "Emergency · Call Now" button white-on-white
   for a while (`text-blush-700` didn't exist until `blush-700` was added). If you
   reference a color token, confirm it's defined.
+
+### Browser-side contrast audit (catches what the token check can't)
+
+`tools/contrast-check.mjs` only validates declared token pairs. It cannot see a
+color inherited from a parent, or text sitting on a gradient. For that, paste the
+`browser_evaluate` snippet into Playwright: it walks every text node, resolves the
+effective background by walking ancestors for the first non-transparent
+`background-color`, converts `oklch()` to sRGB in-page (the canvas trick does **not**
+work here — canvas leaves `oklch()` unresolved), and reports ratios under AA.
+
+Two things it taught us, both worth rechecking after layout edits:
+- Elements on a **gradient scrim** can't be measured from the DOM (it falls back to
+  white and reports a false failure). The gallery caption scrim is real and was
+  fixed by hand — an 80%-to-transparent ramp put white text at 4.48:1 over a bright
+  photo. It now holds opaque to 45% (`from-wine-950 from-45% to-transparent`).
+  Compute gradient cases by hand; don't trust or dismiss the DOM result.
 
 ## Recent fixes (resume point)
 
@@ -88,6 +126,11 @@ light backgrounds. Run `node tools/contrast-check.mjs` after touching a ramp in
 - PageIntro CTAs take either `to` (route) or `onClick` (action). "Book an appointment"
   uses `onClick={openBooking}` — it must open the modal, not navigate to a page that
   only mentions booking.
+- **Per-route `document.title` comes from `ROUTE_TITLES` in `src/App.tsx`**, set by a
+  `RouteTitle` effect. Pages serves `404.html` for *every* deep link, and that file
+  hardcodes the title "Page not found" — without this effect, hard-refreshing
+  `/treatments` rendered the right page under the wrong tab title. Add a new route to
+  `ROUTE_TITLES` or it silently falls through to "Page not found".
 - The Cost Enquiry form opens WhatsApp with the prefilled message — there's no backend in the demo.
 - Before/after gallery uses verified Unsplash stock photos + a "demo imagery" caveat; swap in real case photos before showing the client.
 - Booking modal needs ≥ ~900px width (`max-w-5xl`) or Cal's month view collapses. Verify with `cal-inline` custom element + inner iframe, not screenshots.
@@ -96,7 +139,54 @@ light backgrounds. Run `node tools/contrast-check.mjs` after touching a ramp in
 
 ## Where I left off
 
-All requested work is complete and deployed: multi-page Lumina site, distinct rose/plum design system, plain-white static header + white in-flow trust band, mobile sticky bar + overflow-safe layout, distinct 404, deployed to GitHub Pages (link above). Next session should:
-1. Pull latest (`git pull`) — origin is `lumina-dental`, main branch.
-2. `npm install` (uses `bun.lock` + `package-lock.json`; npm worked).
-3. For client presentation: swap in real dentist/case photos and a real Cal.com slug in `src/config.ts` (`calLink`, `images`), then rebuild + redeploy (commands above).
+**State as of 2026-09-30: clean tree at `3a260d4`, pushed to `main`, and deployed to
+GitHub Pages.** The last session fixed a client-reported problem in two parts, then
+found and fixed a third bug during deployment verification.
+
+Shipped that session:
+- **Readability.** Client reported the site was "extremely hard to read" and that the
+  homepage "shows everything combined into the home section."
+  - Display face Bodoni Moda → **Alegreya** (chosen by the user from a 4-way A/B;
+    Bodoni's Didone hairlines were the core legibility problem).
+  - **Removed Spline Sans Mono entirely**; added a `.label` utility (Archivo 600,
+    0.08em tracking) for kickers. Monospace was rendering every label thin at 10–12px.
+  - **14 WCAG AA contrast failures → 0** across all 7 routes. Re-solved
+    `wine-400/500` + `blush-400/500/600` against porcelain. Added the missing
+    `blush-700` token that made the Emergency CTA button invisible (white-on-white).
+    Fixed the gallery scrim (was 4.48:1).
+  - **Homepage de-duplicated:** 12 stacked sections → Hero, route map, WhyUs,
+    EmergencyCta, one pull-quote, BookingSection. Page height ~7400px → ~4480px.
+- **Per-route `document.title`** — found only because deep links were hard-refreshed
+  during deploy verification, not by clicking through.
+
+Verified before calling it done: `tsc --noEmit` clean, build succeeds, 0 contrast
+failures on all 7 routes (local **and** live), no horizontal overflow at 320px,
+deep links render + title correctly, no console errors.
+
+### Next session — start here
+
+1. `git pull` (origin `lumina-dental`, branch `main`) and `npm install`.
+   If the dev server is needed: `npm run dev` → port **5173**, and the site lives at
+   **`http://localhost:5173/lumina-dental/`** — *not* bare `/`, because `base` is
+   hardcoded to the subpath. A bare `localhost:5173` returns 404 and looks like a
+   broken dev server.
+2. **Before any client presentation, swap the placeholder content in
+   `src/config.ts`** — this is the main outstanding task:
+   - `calLink: "envoyc/demo-dental"` is a placeholder. Without a real Cal.com slug the
+     booking modal shows a "coming soon" panel instead of a calendar.
+   - `images.*` are Unsplash stock. The before/after gallery and dentist portraits are
+     the most visible placeholders; the page carries a visible "demo imagery" caveat.
+3. Everything else the client asked for is done and deployed. If they ask for visual
+   changes, the design decisions above are deliberate — re-read "Design System" and
+   "Gotchas" before undoing them.
+
+### Open questions / not done
+
+- No PRODUCT.md or DESIGN.md in this repo, so `impeccable`'s context script reports
+  `NO_PRODUCT_MD`. Run `/impeccable init` if you want that scaffold; the design
+  context currently lives in this file instead.
+- The dead `ClinicInfo.tsx` / `Features.tsx` fork leftovers are still there
+  (see Gotchas). Harmless, unreferenced, safe to delete if you want them gone.
+- An **Impeccable v4.3.1** update was available (installed v3.9.1) at the time of
+  writing; the user was never asked and it was not applied. `npx impeccable update`
+  if you want it.
